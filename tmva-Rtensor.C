@@ -1,0 +1,38 @@
+using namespace TMVA::Experimental;
+ 
+void tmva001_RTensor()
+{
+   // Create RTensor from scratch
+   RTensor<float> x({2, 2});
+   cout << x << endl;
+ 
+   // Assign some data
+   x(0, 0) = 1;
+   x(0, 1) = 2;
+   x(1, 0) = 3;
+   x(1, 1) = 4;
+ 
+   // Apply transformations
+   auto x2 = x.Reshape({1, 4}).Squeeze();
+   cout << x2 << endl;
+ 
+   // Slice
+   auto x3 = x.Reshape({2, 2}).Slice({{0, 2}, {0, 1}});
+   cout << x3 << endl;
+ 
+   // Create tensor as view on data without ownership
+   float data[] = {5, 6, 7, 8};
+   RTensor<float> y(data, {2, 2});
+   cout << y << endl;
+ 
+   // Create tensor as view on data with ownership
+   auto data2 = std::make_shared<std::vector<float>>(4);
+   float c = 9;
+   for (auto &v : *data2) {
+      v = c;
+      c++;
+   }
+ 
+   RTensor<float> z(data2, {2, 2});
+   cout << z << endl;
+}
